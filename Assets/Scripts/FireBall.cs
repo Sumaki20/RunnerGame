@@ -11,6 +11,7 @@ public class FireBall : MonoBehaviour
     private void Start()
     {
         playerMovement = GameObject.FindObjectOfType<PlayerMovement>();
+        enemy = GameObject.FindObjectOfType<Enemy>();
     }
     void OnCollisionEnter(Collision collision)
     {
@@ -20,18 +21,25 @@ public class FireBall : MonoBehaviour
         }
         if (collision.gameObject.name == "Enemy")
         {
-            
-            enemy.DestroyObject();
+            //enemy.TakeDamage(damage); HitAnything()
         }
 
         HitTarget();
 
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Terrain"))
+        {
+            Destroy(gameObject, 10);
+        }
+    }
+
     void HitTarget ()
     {
         GameObject effectIns = (GameObject) Instantiate(impactEffect, transform.position, transform.rotation);
-        Destroy(effectIns, 2f);
+        Destroy(effectIns, 0.3f);
 
         Destroy(gameObject);
     }

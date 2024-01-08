@@ -16,6 +16,6 @@ public class PanelHowtoplay : MonoBehaviour
     {
         MainMenu.inst.HowToPlayOff();
         MainMenu.inst.SettingMenuOff();
-
+        MainMenu.inst.UpgradeOff();
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6765363881649190749}
   - component: {fileID: 239832332784046617}
   - component: {fileID: 3435813426672558956}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: 2x2_bush_soft_shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 8131693245232743960}
   - component: {fileID: 8382805945011008184}
   - component: {fileID: 8147959551874153590}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: 2x2_bush
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 9050080760067666395}
   - component: {fileID: 2932820676532605449}
   - component: {fileID: 7621933376301930511}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: 2x2_bush
   m_TagString: Untagged
   m_Icon: {fileID: 0}

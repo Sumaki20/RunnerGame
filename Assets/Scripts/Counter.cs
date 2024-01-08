@@ -5,13 +5,15 @@ using UnityEngine.VFX;
 public class Counter : MonoBehaviour
 {
     public GameManager gameManager;
-
-    [SerializeField] private VisualEffect vfxCounter;
+    public PlayerMovement playerMovement;
+    [SerializeField] private ParticleSystem vfxCounter;
     [SerializeField] private AudioSource counterSound;
+    public int manaCost = 20;
     public Animator _animator;
     bool counterAttack = true;
-    bool check = true;
-
+    bool check = false;
+    bool isActive = false;
+    public KeyCode counterButton = KeyCode.Q;
     [Header("Cooldown")]
     public float counterCD = 1f;
     private float counterCdTimer;
@@ -20,22 +22,39 @@ public class Counter : MonoBehaviour
     public float activeTimeSet = 1f;
     private float activeTime;
 
+
     void Update()
     {
         CoolDownSkill();
-        ActiveSkill();
+        ActiveSkill(isActive);
+        playerMovement.CheckStamina(manaCost);
+        if (counterAttack && Input.GetKeyDown(counterButton))
+        {
+            if (playerMovement.activeSkill == true)
+            {
+                playerMovement.UseStamina(manaCost);
+                activeTime = activeTimeSet;
+                counterCdTimer = counterCD;
+                isActive = true;
+            }
+            else
+            {
+                playerMovement.UseStamina(20);
+            }
+            
+        }
     }
 
     private void OnTriggerEnter(Collider collision)
     {
         Rigidbody rb = collision.GetComponent<Rigidbody>();
-        if (check && collision.CompareTag("Bullet"))
+        if (playerMovement.activeSkill == true && check && collision.CompareTag("Bullet"))
         {
             vfxCounter.Play();
             counterSound.Play();
             _animator.SetTrigger("Countering");
-            Debug.Log("Counter Attack!");
-            rb.velocity = -rb.velocity * 1.5f;
+            //Debug.Log("Counter Attack!");
+            rb.velocity = -rb.velocity * (playerMovement.speed/5);
             activeTime = 0;
             check = false;
             gameManager.DoSlowmotion();
@@ -47,7 +66,7 @@ public class Counter : MonoBehaviour
         // CoolDown
         if (counterCdTimer > 0)
         {
-            Debug.Log("CD: " + counterCdTimer);
+            //Debug.Log("CD: " + counterCdTimer);
             counterCdTimer -= Time.deltaTime;
             counterAttack = false;
         }
@@ -58,25 +77,24 @@ public class Counter : MonoBehaviour
         }
         
     }
-    void ActiveSkill()
+    void ActiveSkill(bool isActive)
     {
-        // Active
-        if (activeTime > 0f)
+        if (isActive == true)
         {
-            _animator.SetBool("Counter", true);
-            check = true;
-            activeTime -= Time.deltaTime;
-            Debug.Log("Checked: " + activeTime);
-        }
-        if (activeTime <= 0f)
-        {
-            _animator.SetBool("Counter", false);
-            check = false;
-        }
-        if (counterAttack && Input.GetKey(KeyCode.J))
-        {
-            activeTime = activeTimeSet;
-            counterCdTimer = counterCD;
+            // Active
+            if (activeTime > 0f)
+            {
+                _animator.SetBool("Counter", true);
+                check = true;
+                activeTime -= Time.deltaTime;
+                Debug.Log("Checked: " + activeTime);
+            }
+            if (activeTime <= 0f)
+            {
+                _animator.SetBool("Counter", false);
+                check = false;
+                isActive = false;
+            }
         }
     }
 }

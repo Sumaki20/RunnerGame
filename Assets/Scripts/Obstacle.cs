@@ -17,8 +17,9 @@ public class Obstacle : MonoBehaviour
         if (collision.gameObject.name == "Player")
         {
             // Kill the player
-            playerMovement.TakeDamage(100);
-            
+            //playerMovement.Die();
+            playerMovement.TakeDamage(50);
+            playerMovement.HitObstacle();
         }
     }
 

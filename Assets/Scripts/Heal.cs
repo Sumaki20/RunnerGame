@@ -6,6 +6,7 @@ public class Heal : MonoBehaviour
 {
     [SerializeField] float turnSpeed = 45f;
     public int healing;
+    //Health healthBar;
     PlayerMovement playerMovement;
 
     private void Start()

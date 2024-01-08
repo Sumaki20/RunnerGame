@@ -6,6 +6,12 @@ TagManager:
   tags:
   - Obstacle
   - Enemy
+  - InviWall
+  - Bullet
+  - Terrain
+  - Coin
+  - Event
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -15,7 +21,7 @@ TagManager:
   - UI
   - Enviroment
   - Ground
-  - 
+  - Enemy
   - 
   - 
   - 

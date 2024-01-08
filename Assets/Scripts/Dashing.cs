@@ -28,7 +28,7 @@ public class Dashing : MonoBehaviour
     private float dashCdTimer;
 
     [Header("Input")]
-    public KeyCode dashKey = KeyCode.Space;
+    public KeyCode dashKey = KeyCode.LeftShift;
 
     private void Start()
     {
@@ -39,13 +39,14 @@ public class Dashing : MonoBehaviour
 
     private void Update()
     {
-        
         Dash();
         
         if (dashCdTimer > 0)
             dashCdTimer -= Time.deltaTime;
-        
-    }
+
+    }// && Input.GetKey(dashKey)
+    private const float DOUBLE_CLICK_TIME = 0.2f;
+    private float lastClickTime;
     private void Dash()
     {
         float horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -54,34 +55,55 @@ public class Dashing : MonoBehaviour
 
         
         if (dashCdTimer > 0) return;
-        if (horizontalInput != 0 && Input.GetKey(dashKey))
+        if (pm.isWall == true) return;
+        if (horizontalInput != 0)
         {
-
-            if (horizontalInput > 0)
+            if (Input.GetKeyDown(KeyCode.D))
             {
-                _animator.SetTrigger("DashRight");
-                vfxDashingLeft.Play();
-                dashingSound.Play();
+                float timeSinceLastClick = Time.time - lastClickTime;
+                if (timeSinceLastClick <= DOUBLE_CLICK_TIME)
+                {
+                    _animator.SetTrigger("DashRight");
+                    vfxDashingLeft.Play();
+                    dashingSound.Play();
+                    dashCdTimer = dashCD;
+
+                    pm.dashing = true;
+
+                    // คำนวณเวลาที่จะใช้ในการ Dash
+                    float dashTime = dashDistance / dashSpeed;
+
+                    // คำนวณตำแหน่งที่ต้องการไป
+                    Vector3 targetPosition = transform.position + orientation.right * horizontalInput * dashDistance;
+
+                    // เริ่ม Coroutine สำหรับการเคลื่อนที่
+                    StartCoroutine(DashCoroutine(targetPosition, dashTime));
+                }
+                lastClickTime = Time.time;
             }
-            if (horizontalInput < 0)
+            if (Input.GetKeyDown(KeyCode.A))
             {
-                
-                _animator.SetTrigger("DashLeft");
-                vfxDashingRight.Play();
-                dashingSound.Play();
+                float timeSinceLastClick = Time.time - lastClickTime;
+                if (timeSinceLastClick <= DOUBLE_CLICK_TIME)
+                {
+                    _animator.SetTrigger("DashLeft");
+                    vfxDashingRight.Play();
+                    dashingSound.Play();
+                    dashCdTimer = dashCD;
+
+                    pm.dashing = true;
+
+                    // คำนวณเวลาที่จะใช้ในการ Dash
+                    float dashTime = dashDistance / dashSpeed;
+
+                    // คำนวณตำแหน่งที่ต้องการไป
+                    Vector3 targetPosition = transform.position + orientation.right * horizontalInput * dashDistance;
+
+                    // เริ่ม Coroutine สำหรับการเคลื่อนที่
+                    StartCoroutine(DashCoroutine(targetPosition, dashTime));
+                }
+                lastClickTime = Time.time;
             }
-            dashCdTimer = dashCD;
-
-            pm.dashing = true;
-
-            // คำนวณเวลาที่จะใช้ในการ Dash
-            float dashTime = dashDistance / dashSpeed;
-
-            // คำนวณตำแหน่งที่ต้องการไป
-            Vector3 targetPosition = transform.position + orientation.right * horizontalInput * dashDistance;
-
-            // เริ่ม Coroutine สำหรับการเคลื่อนที่
-            StartCoroutine(DashCoroutine(targetPosition, dashTime));
             
         }
         else
